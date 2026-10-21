@@ -262,6 +262,26 @@ function installedMarketplaceId() {
   return null;
 }
 
+function detectMarketplaceId() {
+  const seed = readJson(join(PLUGIN_ROOT, ".zcode-plugin-seed.json"));
+  return (
+    (typeof seed?.marketplace === "string" ? seed.marketplace : null) ?? installedMarketplaceId()
+  );
+}
+
+function knownMarketplaceSource(id) {
+  for (const known of [
+    join(zcodeHome(), "cli", "plugins", "known_marketplaces.json"),
+    join(zcodeHome(), "plugins", "known_marketplaces.json")
+  ]) {
+    const json = readJson(known);
+    const entries = Array.isArray(json?.marketplaces) ? json.marketplaces : [];
+    const entry = entries.find((item) => item?.id === id);
+    if (entry?.source && typeof entry.source === "object") return entry.source;
+  }
+  return null;
+}
+
 function marketplaceFiles(settings) {
   const files = [];
   const add = (value) => {
@@ -278,9 +298,7 @@ function marketplaceFiles(settings) {
     }
   }
   // Auto-detect the marketplace this installed copy came from.
-  const seed = readJson(join(PLUGIN_ROOT, ".zcode-plugin-seed.json"));
-  const marketplaceId =
-    (typeof seed?.marketplace === "string" ? seed.marketplace : null) ?? installedMarketplaceId();
+  const marketplaceId = detectMarketplaceId();
   if (marketplaceId) {
     // ZCode caches the resolved catalog for every source type (including a
     // GitHub marketplace) under this directory. It is the most reliable
@@ -313,21 +331,74 @@ function marketplaceFiles(settings) {
   return files;
 }
 
+function versionFromManifest(json, baseDir) {
+  if (!json || !Array.isArray(json.plugins)) return null;
+  const entry = json.plugins.find((item) => item?.name === PLUGIN_NAME);
+  if (!entry) return null;
+  if (typeof entry.version === "string" && entry.version.trim()) return entry.version.trim();
+  const source = entry.source;
+  const sourcePath =
+    typeof source === "string" ? source : typeof source?.path === "string" ? source.path : null;
+  if (sourcePath && baseDir) {
+    const dir = isAbsolute(sourcePath) ? sourcePath : resolve(baseDir, sourcePath);
+    const manifest = readJson(join(dir, ".zcode-plugin", "plugin.json"));
+    if (typeof manifest?.version === "string") return manifest.version;
+  }
+  return null;
+}
+
+function versionFromFile(file) {
+  return versionFromManifest(readJson(file), dirname(file));
+}
+
 function versionFromMarketplace(settings) {
   for (const file of marketplaceFiles(settings)) {
-    const json = readJson(file);
-    if (json === null || !Array.isArray(json.plugins)) continue;
-    const entry = json.plugins.find((item) => item?.name === PLUGIN_NAME);
-    if (!entry) continue;
-    if (typeof entry.version === "string" && entry.version.trim()) return entry.version.trim();
-    const source = entry.source;
-    const sourcePath =
-      typeof source === "string" ? source : typeof source?.path === "string" ? source.path : null;
-    if (sourcePath) {
-      const dir = isAbsolute(sourcePath) ? sourcePath : resolve(dirname(file), sourcePath);
-      const manifest = readJson(join(dir, ".zcode-plugin", "plugin.json"));
-      if (typeof manifest?.version === "string") return manifest.version;
+    const version = versionFromFile(file);
+    if (version) return version;
+  }
+  return null;
+}
+
+async function versionFromUrl(url) {
+  try {
+    const response = await fetch(url, {
+      headers: {
+        Accept: "application/json",
+        "User-Agent": `zcode-opencode-go-usage/${CURRENT_VERSION}`
+      },
+      signal: AbortSignal.timeout(10_000)
+    });
+    if (!response.ok) return null;
+    return versionFromManifest(await response.json().catch(() => null), null);
+  } catch {
+    return null;
+  }
+}
+
+async function versionFromSource(source) {
+  if (!source || typeof source !== "object") return null;
+  if (source.source === "url" && typeof source.url === "string") {
+    return versionFromUrl(source.url);
+  }
+  if (source.source === "github" && typeof source.repo === "string") {
+    const ref = typeof source.ref === "string" && source.ref ? source.ref : "HEAD";
+    for (const path of [".claude-plugin/marketplace.json", "marketplace.json"]) {
+      const version = await versionFromUrl(
+        `https://raw.githubusercontent.com/${source.repo}/${ref}/${path}`
+      );
+      if (version) return version;
     }
+    return null;
+  }
+  if (typeof source.path === "string" && source.path) {
+    if (source.source === "file" || source.path.endsWith(".json")) {
+      return versionFromFile(resolve(source.path));
+    }
+    const dir = resolve(source.path);
+    return (
+      versionFromFile(join(dir, "marketplace.json")) ??
+      versionFromFile(join(dir, ".claude-plugin", "marketplace.json"))
+    );
   }
   return null;
 }
@@ -342,6 +413,13 @@ async function latestVersion(settings) {
     const json = await response.json().catch(() => null);
     const version = json?.version ?? json?.latest;
     return typeof version === "string" ? version : null;
+  }
+  // Prefer the marketplace's live source over a possibly stale cache.
+  const marketplaceId = detectMarketplaceId();
+  const source = marketplaceId ? knownMarketplaceSource(marketplaceId) : null;
+  if (source) {
+    const version = await versionFromSource(source);
+    if (version) return version;
   }
   return versionFromMarketplace(settings);
 }
@@ -359,10 +437,21 @@ function kickUpdateCheck(settings) {
       // offline / unreadable marketplace — keep the previous result
       latest = updateState?.latest ?? null;
     }
-    updateState = { at: Date.now(), latest };
+    // A null result means "no source / offline"; retry sooner than a
+    // successful check so a transient failure does not hide updates for a day.
+    updateState =
+      latest === null
+        ? {
+            at: Date.now() - UPDATE_CHECK_INTERVAL_MS + 5 * 60_000,
+            latest: updateState?.latest ?? null
+          }
+        : { at: Date.now(), latest };
   })()
     .catch(() => {
-      updateState = { at: Date.now(), latest: updateState?.latest ?? null };
+      updateState = {
+        at: Date.now() - UPDATE_CHECK_INTERVAL_MS + 5 * 60_000,
+        latest: updateState?.latest ?? null
+      };
     })
     .finally(() => {
       updateInFlight = null;

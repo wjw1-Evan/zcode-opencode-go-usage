@@ -8,7 +8,7 @@
     {
       "name": "opencode-go-usage",
       "source": "./plugins/opencode-go-usage",
-      "version": "0.1.1",
+      "version": "0.1.2",
       "description": "Watch your OpenCode GO plan quota in a ZCode panel: rolling 5h, weekly and monthly usage bars with reset countdowns and time-elapsed bars, plus an /opencode-go command.",
       "displayName": "OpenCode GO Usage",
       "displayName_i18n": {
