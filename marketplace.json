@@ -1,0 +1,23 @@
+{
+  "name": "zcode-opencode-go-usage",
+  "owner": {
+    "name": "wjw1-Evan",
+    "url": "https://github.com/wjw1-Evan"
+  },
+  "plugins": [
+    {
+      "name": "opencode-go-usage",
+      "source": "./plugins/opencode-go-usage",
+      "version": "0.1.0",
+      "description": "Watch your OpenCode GO plan quota in a ZCode panel: rolling 5h, weekly and monthly usage bars with reset countdowns and time-elapsed bars, plus an /opencode-go command.",
+      "displayName": "OpenCode GO Usage",
+      "displayName_i18n": {
+        "zh-CN": "OpenCode GO 用量"
+      },
+      "description_i18n": {
+        "zh-CN": "在 ZCode 面板中查看 OpenCode GO 订阅用量：5 小时滚动、周、月三条进度条，带重置倒计时与时间进度条，并提供 /opencode-go 命令。"
+      },
+      "category": "utilities"
+    }
+  ]
+}
