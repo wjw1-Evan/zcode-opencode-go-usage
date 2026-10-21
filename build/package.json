@@ -1,0 +1,12 @@
+{
+  "name": "opencode-go-usage-build",
+  "private": true,
+  "type": "module",
+  "description": "Build dependencies for the opencode-go-usage ZCode plugin (not shipped).",
+  "dependencies": {
+    "@modelcontextprotocol/ext-apps": "2.0.3",
+    "@modelcontextprotocol/sdk": "1.32.1",
+    "esbuild": "0.28.2",
+    "zod": "4.4.3"
+  }
+}

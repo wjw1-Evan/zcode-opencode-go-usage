@@ -1,0 +1,274 @@
+:root {
+  color-scheme: light dark;
+  --ocg-text: var(--color-text-primary, #1f2328);
+  --ocg-muted: var(--color-text-secondary, #656d76);
+  --ocg-track: var(--color-border-secondary, rgba(127, 127, 127, 0.28));
+  --ocg-hover: var(--color-background-secondary, rgba(127, 127, 127, 0.12));
+  --ocg-success: var(--color-text-success, #1a7f37);
+  --ocg-warn: var(--color-text-warning, #9a6700);
+  --ocg-error: var(--color-text-danger, #cf222e);
+  --ocg-blue: #5686fe;
+}
+
+:root[data-theme="dark"] {
+  --ocg-text: var(--color-text-primary, #e6edf3);
+  --ocg-muted: var(--color-text-secondary, #9da7b3);
+  --ocg-track: var(--color-border-secondary, rgba(200, 200, 200, 0.24));
+  --ocg-hover: var(--color-background-secondary, rgba(200, 200, 200, 0.12));
+  --ocg-success: var(--color-text-success, #3fb950);
+  --ocg-warn: var(--color-text-warning, #d29922);
+  --ocg-error: var(--color-text-danger, #f85149);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ocg-text: var(--color-text-primary, #e6edf3);
+    --ocg-muted: var(--color-text-secondary, #9da7b3);
+    --ocg-track: var(--color-border-secondary, rgba(200, 200, 200, 0.24));
+    --ocg-hover: var(--color-background-secondary, rgba(200, 200, 200, 0.12));
+    --ocg-success: var(--color-text-success, #3fb950);
+    --ocg-warn: var(--color-text-warning, #d29922);
+    --ocg-error: var(--color-text-danger, #f85149);
+  }
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: transparent;
+}
+
+body {
+  color: var(--ocg-text);
+  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+      "Hiragino Sans GB", "Microsoft YaHei", sans-serif);
+  font-size: 12px;
+  line-height: 1.35;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  box-sizing: border-box;
+  min-height: 100%;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+}
+
+.ocg-widget {
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ocg-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 20px;
+}
+
+.ocg-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ocg-badges {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.ocg-refresh {
+  flex: none;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--ocg-muted);
+  font: inherit;
+  font-size: 12px;
+  line-height: 20px;
+  cursor: pointer;
+}
+
+.ocg-refresh:hover:not(:disabled) {
+  color: var(--ocg-text);
+}
+
+.ocg-refresh:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.ocg-refresh:focus-visible {
+  outline: 2px solid var(--color-ring-primary, #0969da);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.ocg-err {
+  overflow: hidden;
+  color: var(--ocg-muted);
+  font-size: 11px;
+  line-height: 16px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ocg-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ocg-row {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.ocg-row-label {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  color: var(--ocg-muted);
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.ocg-row-label b {
+  font-weight: 500;
+  color: var(--ocg-text);
+}
+
+.ocg-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+/* The two stacked bars share one flex column. min-width:0 + flex:1 belongs
+   on the column (it is the flex item of .ocg-meta); the bars inside it keep
+   their fixed heights, hence flex:none — with flex:1 on the column axis they
+   would collapse to zero height. */
+.ocg-bars {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.ocg-meta > span {
+  flex: none;
+  color: var(--ocg-muted);
+  font-size: 11px;
+  line-height: 14px;
+  white-space: nowrap;
+}
+
+.ocg-track {
+  box-sizing: border-box;
+  flex: none;
+  height: 5px;
+  border-radius: 3px;
+  background: var(--ocg-track);
+  overflow: hidden;
+}
+
+.ocg-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.4s ease;
+}
+
+/* Time bar: two side-by-side segments, never overlapping. Gray on the left
+   is time already elapsed (grows rightward); blue on the right is time
+   remaining (shrinks leftward). Geometry is IDENTICAL to the quota bar above
+   (5px / 3px) so the two stacked bars match in shape and differ only in
+   color and direction. Both segments round all four corners, so the junction
+   where they meet is rounded too. */
+.ocg-timetrack {
+  box-sizing: border-box;
+  flex: none;
+  display: flex;
+  width: 100%;
+  height: 5px;
+  border-radius: 3px;
+  background: var(--ocg-track);
+  overflow: hidden;
+}
+
+.ocg-timeelapsed {
+  height: 100%;
+  flex: none;
+  border-radius: 3px;
+  background: var(--ocg-track);
+  transition: width 0.4s ease;
+}
+
+.ocg-timeremain {
+  height: 100%;
+  flex: 1 1 auto;
+  min-width: 0;
+  border-radius: 3px;
+  background: var(--ocg-blue);
+  transition: width 0.4s ease;
+}
+
+.ocg-update {
+  display: inline-block;
+  max-width: 150px;
+  padding: 1px 6px;
+  border-radius: 8px;
+  overflow: hidden;
+  color: var(--ocg-text);
+  background: var(--ocg-hover);
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 16px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Collapsed (very narrow panel): compact monthly-percentage badge. */
+.ocg-compact {
+  width: 44px;
+  height: 44px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  color: var(--ocg-text);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: default;
+}
+
+.ocg-compact:hover {
+  background: var(--ocg-hover);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ocg-fill,
+  .ocg-timeelapsed,
+  .ocg-timeremain {
+    transition: none;
+  }
+}

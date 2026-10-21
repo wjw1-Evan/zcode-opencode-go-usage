@@ -1,0 +1,14 @@
+{
+  "name": "zcode-opencode-go-usage",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "ZCode plugin: OpenCode GO subscription usage dashboard, MCP tool and /opencode-go command.",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "node ../../build/build.mjs"
+  }
+}

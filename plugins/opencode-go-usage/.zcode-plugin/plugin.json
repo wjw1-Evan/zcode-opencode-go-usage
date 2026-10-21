@@ -1,0 +1,90 @@
+{
+  "name": "opencode-go-usage",
+  "displayName": "OpenCode GO Usage",
+  "displayName_i18n": {
+    "en": "OpenCode GO Usage",
+    "zh-CN": "OpenCode GO 用量"
+  },
+  "description": "Watch your OpenCode GO plan quota in a ZCode panel: rolling 5h, weekly and monthly usage bars with reset countdowns and time-elapsed bars, plus an /opencode-go command.",
+  "description_i18n": {
+    "en": "Watch your OpenCode GO plan quota in a ZCode panel: rolling 5h, weekly and monthly usage bars with reset countdowns and time-elapsed bars, plus an /opencode-go command.",
+    "zh-CN": "在 ZCode 面板中查看 OpenCode GO 订阅用量：5 小时滚动、周、月三条用量进度条，带重置倒计时与时间进度条，并提供 /opencode-go 命令。"
+  },
+  "version": "0.1.0",
+  "author": {
+    "name": "opencode-go-usage contributors"
+  },
+  "license": "MIT",
+  "keywords": [
+    "opencode",
+    "opencode-go",
+    "usage",
+    "quota",
+    "subscription",
+    "mcp",
+    "dashboard"
+  ],
+  "skills": "./skills",
+  "commands": "./commands",
+  "mcpServers": {
+    "usage": {
+      "type": "stdio",
+      "command": "/bin/sh",
+      "args": [
+        "${ZCODE_PLUGIN_ROOT}/dist/launch.sh"
+      ],
+      "cwd": "${ZCODE_PROJECT_DIR}",
+      "timeoutMs": 45000,
+      "env": {
+        "OPENCODE_GO_API_KEY": "${user_config.api_key}",
+        "OPENCODE_GO_BASE_URL": "${user_config.base_url}",
+        "OPENCODE_GO_CACHE_MS": "${user_config.cache_ms}",
+        "OPENCODE_GO_UPDATE_CHECK": "${user_config.update_check}",
+        "OPENCODE_GO_MARKETPLACE_PATH": "${user_config.marketplace_path}"
+      }
+    }
+  },
+  "ui": {
+    "surfaces": [
+      {
+        "id": "dashboard",
+        "title": {
+          "en-US": "OpenCode GO",
+          "zh-CN": "OpenCode GO 用量"
+        },
+        "icon": "gauge",
+        "server": "usage",
+        "resourceUri": "ui://opencode-go-usage/dashboard.html",
+        "availability": "session"
+      }
+    ]
+  },
+  "userConfig": {
+    "api_key": {
+      "type": "string",
+      "default": "",
+      "sensitive": true,
+      "description": "OpenCode GO API key（sk-...，可在 https://opencode.ai/auth 创建）。留空则自动读取 ZCode 的 OpenCode Go 供应商配置中的密钥。"
+    },
+    "base_url": {
+      "type": "string",
+      "default": "https://opencode.ai/zen/go",
+      "description": "OpenCode GO 网关地址。一般无需修改；留空同样使用该默认值。"
+    },
+    "cache_ms": {
+      "type": "number",
+      "default": 30000,
+      "description": "用量结果的缓存时间（毫秒），避免多个面板或命令频繁请求网关。"
+    },
+    "update_check": {
+      "type": "boolean",
+      "default": true,
+      "description": "检查本地插件市场是否有新版本（只提示，不会自动升级）。"
+    },
+    "marketplace_path": {
+      "type": "string",
+      "default": "",
+      "description": "可选：本地插件市场目录或 marketplace.json 路径。留空时自动根据已安装插件记录探测。"
+    }
+  }
+}
