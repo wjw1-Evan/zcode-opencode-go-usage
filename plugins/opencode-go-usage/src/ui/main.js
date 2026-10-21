@@ -10,7 +10,7 @@ import {
   applyHostStyleVariables
 } from "@modelcontextprotocol/ext-apps";
 
-const VERSION = "0.1.0";
+const VERSION = "0.1.1";
 const WINDOWS = [
   { key: "rolling", labelKey: "rolling", hint: null, windowMs: 5 * 3600e3 },
   { key: "weekly", labelKey: "weekly", hint: null, windowMs: 7 * 86400e3 },

@@ -236,6 +236,32 @@ function isNewer(a, b) {
   return false;
 }
 
+/**
+ * The installer normally writes `.zcode-plugin-seed.json`, but URL-based
+ * marketplaces may omit it. The installed-plugin registry always records the
+ * marketplace id, so it is the fallback for update checks.
+ */
+function installedMarketplaceId() {
+  const root = PLUGIN_ROOT.replace(/\/+$/, "");
+  for (const file of [
+    join(zcodeHome(), "cli", "plugins", "installed_plugins.json"),
+    join(zcodeHome(), "plugins", "installed_plugins.json")
+  ]) {
+    const json = readJson(file);
+    const plugins = Array.isArray(json?.plugins) ? json.plugins : [];
+    const matches = plugins.filter((entry) => entry && entry.name === PLUGIN_NAME);
+    if (matches.length === 0) continue;
+    const exact = matches.find(
+      (entry) =>
+        typeof entry.installPath === "string" &&
+        entry.installPath.replace(/\/+$/, "") === root
+    );
+    const chosen = exact ?? matches[0];
+    if (typeof chosen.marketplace === "string" && chosen.marketplace) return chosen.marketplace;
+  }
+  return null;
+}
+
 function marketplaceFiles(settings) {
   const files = [];
   const add = (value) => {
@@ -253,7 +279,8 @@ function marketplaceFiles(settings) {
   }
   // Auto-detect the marketplace this installed copy came from.
   const seed = readJson(join(PLUGIN_ROOT, ".zcode-plugin-seed.json"));
-  const marketplaceId = typeof seed?.marketplace === "string" ? seed.marketplace : null;
+  const marketplaceId =
+    (typeof seed?.marketplace === "string" ? seed.marketplace : null) ?? installedMarketplaceId();
   if (marketplaceId) {
     // ZCode caches the resolved catalog for every source type (including a
     // GitHub marketplace) under this directory. It is the most reliable
