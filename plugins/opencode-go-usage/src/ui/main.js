@@ -10,7 +10,7 @@ import {
   applyHostStyleVariables
 } from "@modelcontextprotocol/ext-apps";
 
-const VERSION = "0.1.2";
+const VERSION = "0.1.3";
 const WINDOWS = [
   { key: "rolling", labelKey: "rolling", hint: null, windowMs: 5 * 3600e3 },
   { key: "weekly", labelKey: "weekly", hint: null, windowMs: 7 * 86400e3 },
@@ -196,13 +196,26 @@ function build(compact) {
 
   const widget = el("div", "ocg-widget");
   const head = el("div", "ocg-head");
+  const mark = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  mark.setAttribute("viewBox", "0 0 32 32");
+  mark.setAttribute("aria-hidden", "true");
+  mark.classList.add("ocg-mark");
+  mark.innerHTML = [
+    '<rect width="32" height="32" rx="8" fill="#0B1220"/>',
+    '<rect x="7" y="9" width="18" height="4" rx="2" fill="#FFFFFF" opacity=".10"/>',
+    '<rect x="7" y="9" width="7" height="4" rx="2" fill="#3FB950"/>',
+    '<rect x="7" y="14" width="18" height="4" rx="2" fill="#FFFFFF" opacity=".10"/>',
+    '<rect x="7" y="14" width="13" height="4" rx="2" fill="#D29922"/>',
+    '<rect x="7" y="19" width="18" height="4" rx="2" fill="#FFFFFF" opacity=".10"/>',
+    '<rect x="7" y="19" width="16" height="4" rx="2" fill="#5686FE"/>'
+  ].join("");
   const title = el("span", "ocg-title");
   title.textContent = "OpenCode GO";
   const badges = el("span", "ocg-badges");
   const refresh = el("button", "ocg-refresh");
   refresh.type = "button";
   refresh.addEventListener("click", () => load(true));
-  head.append(title, badges, refresh);
+  head.append(mark, title, badges, refresh);
 
   const error = el("div", "ocg-err");
   const rows = el("div", "ocg-rows");

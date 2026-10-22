@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="OpenCode GO usage icon">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0B1220"/>
+      <stop offset="0.62" stop-color="#101C31"/>
+      <stop offset="1" stop-color="#16243D"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.16" cy="0.06" r="0.95">
+      <stop offset="0" stop-color="#5686FE" stop-opacity="0.34"/>
+      <stop offset="0.52" stop-color="#5686FE" stop-opacity="0.06"/>
+      <stop offset="1" stop-color="#5686FE" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="green" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#56D364"/>
+      <stop offset="1" stop-color="#2EA043"/>
+    </linearGradient>
+    <linearGradient id="amber" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#E3B341"/>
+      <stop offset="1" stop-color="#D29922"/>
+    </linearGradient>
+    <linearGradient id="blue" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#8AB4FF"/>
+      <stop offset="1" stop-color="#5686FE"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Full-bleed tile background -->
+  <rect width="512" height="512" fill="url(#bg)"/>
+  <rect width="512" height="512" fill="url(#glow)"/>
+  <circle cx="438" cy="64" r="150" fill="#5686FE" opacity="0.08"/>
+  <path d="M0 0h512v190C356 238 164 232 0 176Z" fill="#FFFFFF" opacity="0.025"/>
+
+  <!-- Inner rounded frame -->
+  <rect x="8" y="8" width="496" height="496" rx="104" fill="none" stroke="#FFFFFF" stroke-opacity="0.08" stroke-width="2"/>
+
+  <!-- Rolling 5h: quota + time bar -->
+  <g>
+    <rect x="80" y="128" width="352" height="46" rx="23" fill="#FFFFFF" opacity="0.10"/>
+    <rect x="80" y="128" width="113" height="46" rx="23" fill="url(#green)"/>
+    <rect x="80" y="184" width="352" height="8" rx="4" fill="#FFFFFF" opacity="0.07"/>
+    <rect x="80" y="184" width="194" height="8" rx="4" fill="#FFFFFF" opacity="0.22"/>
+    <rect x="274" y="184" width="158" height="8" rx="4" fill="#5686FE"/>
+  </g>
+
+  <!-- Weekly: quota + time bar -->
+  <g>
+    <rect x="80" y="216" width="352" height="46" rx="23" fill="#FFFFFF" opacity="0.10"/>
+    <rect x="80" y="216" width="253" height="46" rx="23" fill="url(#amber)"/>
+    <rect x="80" y="272" width="352" height="8" rx="4" fill="#FFFFFF" opacity="0.07"/>
+    <rect x="80" y="272" width="123" height="8" rx="4" fill="#FFFFFF" opacity="0.22"/>
+    <rect x="203" y="272" width="229" height="8" rx="4" fill="#5686FE"/>
+  </g>
+
+  <!-- Monthly: quota + time bar -->
+  <g>
+    <rect x="80" y="304" width="352" height="46" rx="23" fill="#FFFFFF" opacity="0.10"/>
+    <rect x="80" y="304" width="320" height="46" rx="23" fill="url(#blue)"/>
+    <rect x="80" y="360" width="352" height="8" rx="4" fill="#FFFFFF" opacity="0.07"/>
+    <rect x="80" y="360" width="63" height="8" rx="4" fill="#FFFFFF" opacity="0.22"/>
+    <rect x="143" y="360" width="289" height="8" rx="4" fill="#5686FE"/>
+  </g>
+</svg>

@@ -1,3 +1,5 @@
+<p align="center"><img src="plugins/opencode-go-usage/assets/icon-512.png" width="96" height="96" alt="OpenCode GO Usage icon"></p>
+
 # zcode-opencode-go-usage
 
 A [ZCode](https://zcode.z.ai) plugin that shows your **OpenCode GO** subscription quota: rolling 5-hour, weekly and monthly usage bars with reset countdowns and a time-elapsed bar under each row, plus an `/opencode-go` command.

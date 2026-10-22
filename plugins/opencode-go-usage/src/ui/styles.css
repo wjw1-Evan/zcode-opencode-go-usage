@@ -76,6 +76,15 @@ body {
   line-height: 20px;
 }
 
+.ocg-mark {
+  flex: none;
+  display: block;
+  width: 18px;
+  height: 18px;
+  border-radius: 5px;
+  box-shadow: 0 0 0 1px var(--ocg-track);
+}
+
 .ocg-title {
   flex: 1 1 auto;
   min-width: 0;

@@ -1,3 +1,5 @@
+<p align="center"><img src="assets/icon-512.png" width="96" height="96" alt="OpenCode GO Usage icon"></p>
+
 # OpenCode GO Usage（ZCode 插件）
 
 在 ZCode 中查看 **OpenCode GO** 订阅用量：5 小时滚动窗口、周窗口、月窗口三条进度条，带重置倒计时和“时间进度”条，并提供 `/opencode-go` 命令。
