@@ -546,7 +546,7 @@ server.registerTool(
   {
     title: "OpenCode GO plan usage",
     description:
-      "Read the OpenCode GO subscription quota: rolling 5-hour, weekly and monthly windows, each with its usage percent, status and reset time. Returns a text summary plus structured usage data, and opens the usage dashboard panel.",
+      "Read the OpenCode GO subscription quota: rolling 5-hour, weekly and monthly windows, each with its usage percent, status and reset time. Returns a text summary plus structured usage data. The result renders as an inline usage card by default; the same dashboard is also available in the side pane.",
     inputSchema: {
       refresh: z
         .boolean()
@@ -569,6 +569,8 @@ server.registerTool(
         resourceUri: UI_URI,
         visibility: ["model", "app"],
         surface: "dashboard",
+        preferredDisplayMode: "inline",
+        showInline: true,
         prefersBorder: true
       }
     }
@@ -628,6 +630,8 @@ server.registerResource(
     mimeType: "text/html;profile=mcp-app",
     _meta: {
       ui: {
+        preferredDisplayMode: "inline",
+        showInline: true,
         prefersBorder: true
       }
     }

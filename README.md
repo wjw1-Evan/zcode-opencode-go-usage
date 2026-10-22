@@ -10,7 +10,8 @@ This is a ZCode port of the DSH plugin [Astervolans/dsh-opencode-go-usage](https
 
 ## Features
 
-- **Usage panel** — an MCP App panel with three rows: rolling 5h, weekly, monthly. Each row has a quota bar, a reset countdown, and a time bar underneath.
+- **Inline usage card** — tool calls render the dashboard directly in the conversation, with "Keep expanded" and "Open in side pane" actions. No need to open the side panel first.
+- **Usage panel** — the same MCP App is also available as a side-pane panel with three rows: rolling 5h, weekly, monthly. Each row has a quota bar, a reset countdown, and a time bar underneath.
 - **Time bars** — gray on the left is time already elapsed (grows rightward), blue on the right is time remaining (shrinks leftward). Both bars are 5px high with 3px radii, matching the upstream widget exactly. Hover for the elapsed/remaining percentages.
 - **Compact badge** — when the panel is narrower than 230px, it collapses to the monthly percentage badge.
 - **`/opencode-go` command** — prints the same numbers as text in any conversation.
@@ -40,7 +41,8 @@ Requires Node.js 18+. The launcher searches `node`, Homebrew, `/usr/local`, Volt
 
 ## Usage
 
-- **Panel** — open **OpenCode GO Usage** from the plugin panels. The upper bar in each row is quota used; the lower bar is the window clock. Gray = elapsed, blue = remaining. When the usage bar is above the clock, you are burning quota faster than time.
+- **Inline card** — run `/opencode-go` (or let the agent call the tool) and the usage card appears in the conversation. Pin it with **Keep expanded**, or move it to the side pane with **Open in side pane**.
+- **Panel** — open **OpenCode GO Usage** from the plugin panels for a persistent side-pane view. The upper bar in each row is quota used; the lower bar is the window clock. Gray = elapsed, blue = remaining. When the usage bar is above the clock, you are burning quota faster than time.
 - **Command** — type `/opencode-go` in any conversation. Add `refresh` to bypass the cache, e.g. `/opencode-go refresh`.
 - **Tool** — `opencode_go_usage` with optional `refresh: boolean` and `lang: "zh" | "en"`.
 

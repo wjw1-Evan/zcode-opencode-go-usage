@@ -5,10 +5,10 @@ description: Show the OpenCode GO subscription quota and open the usage dashboar
 
 # OpenCode GO Usage
 
-The plugin exposes one MCP tool and one panel:
+The plugin exposes one MCP tool and one dashboard resource:
 
-- `opencode_go_usage` (server `opencode-go-usage`) returns the current quota for the rolling 5-hour, weekly and monthly windows, plus reset times, cache state, update availability and session-header diagnostics. Calling it from the model also targets the dashboard surface.
-- The dashboard panel (`ui://opencode-go-usage/dashboard.html`) renders the same data as three usage bars with time-elapsed bars, reset countdowns and a refresh button.
+- `opencode_go_usage` (server `opencode-go-usage`) returns the current quota for the rolling 5-hour, weekly and monthly windows, plus reset times, cache state, update availability and session-header diagnostics. Calling it from the model renders the usage card inline in the conversation; the card has "固定显示 / Keep expanded" and "在侧栏打开 / Open in side pane" actions.
+- The dashboard resource (`ui://opencode-go-usage/dashboard.html`) renders the same data as three usage bars with time-elapsed bars, reset countdowns and a refresh button. It is also available as a side-pane panel.
 
 ## How to answer
 
